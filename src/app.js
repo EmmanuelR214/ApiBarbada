@@ -8,8 +8,7 @@ import indexRoutesAdmin from './routes/admin.routes.js'
 const app = express()
 
 app.use(cors({
-    // origin: 'http://localhost:5173',  
-    origin: 'https://la-barbada-neon.vercel.app/',
+    origin: 'http://localhost:5173',   
     credentials: true
 }));
 app.use(express.json())
