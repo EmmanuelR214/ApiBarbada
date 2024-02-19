@@ -23,7 +23,7 @@ router.post('/login', LoginClient)
 router.post('/logout', PostLogout)
 
 //Trae los datos del usuario
-router.post('/dataUser',PostDataUser)
+router.get('/dataUser',PostDataUser)
 
 export default router
 
