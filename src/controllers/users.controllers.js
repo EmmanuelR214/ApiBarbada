@@ -122,7 +122,7 @@ export const LoginClient =  async(req,res)=>{
             const token = await CreateAccessToken({id: user.id_usuario})
             
             res.cookie('token', token, {
-                httpOnly: true, sameSite: 'none', secure: true, expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+                httpOnly: true, sameSite: 'none', expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365)
             })
             // ,{ maxAge: 86400000, httpOnly: true, sameSite: 'none', secure: true, httpOnly: false}
             res.json({
