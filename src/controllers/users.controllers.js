@@ -91,15 +91,16 @@ export const verifYToken = async(req, res) =>{
             jwt.verify(token, TOKEN_SECRET, async (err, user) => {
                 if(err) return res.status(401).json({message:'Unauthorized'})
             
-            const [userFound] = await Coonexion.query('CALL obtenerUsuarioID(?)', [user.id])
+            const [userFound] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario = ?', [user.id])
             
-            if(!userFound[0]) return res.status(401).json({message:'Unauthorized'})
+            if(!userFound) return res.status(401).json({message:'Unauthorized'})
             
-            const [[dataUser]] = userFound
+            const dataUser = userFound[0]
             console.log(dataUser)
             return res.json({
                 id: dataUser.id_usuario,
                 nombre: dataUser.nombre,
+                telefono: dataUser.telefono
             })
         })
     } catch (error) {
@@ -109,7 +110,6 @@ export const verifYToken = async(req, res) =>{
 
 export const LoginClient =  async(req,res)=>{
     const {nombre, password} = req.body
-    console.log('entro', nombre, password)
     try {
         const [result] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
         
@@ -121,9 +121,7 @@ export const LoginClient =  async(req,res)=>{
             
             const token = await CreateAccessToken({id: user.id_usuario})
             
-            res.cookie('token', token, {
-                httpOnly: true, sameSite: 'none', secure: true,  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365)
-            })
+            res.cookie('token', token, {})
             // ,{ maxAge: 86400000, httpOnly: true, sameSite: 'none', secure: true, httpOnly: false}
             res.json({
                 user
