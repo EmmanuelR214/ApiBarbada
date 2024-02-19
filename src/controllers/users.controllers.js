@@ -1,4 +1,10 @@
+//Conextion
 import { Coonexion } from "../db.js"
+
+//Dependencias
+import {v4 as uuidv4} from 'uuid'
+
+//Configuraciones
 import bcrypt from 'bcrypt';
 import { CreateAccessToken } from "../libs/jwt.js";
 import jwt from 'jsonwebtoken';
@@ -25,14 +31,17 @@ const compareData = async (data, hash) => {
 
 //Reccuperar 
 export const CompareUs = async (req, res) =>{
-    const {numero, pass} = req.body
+    const {telefono, pass} = req.body
     try {
-        const [result] = await Coonexion.query('SELECT * FROM usuarios WHERE telefono = ?',[numero])
+        const [[result]] = await Coonexion.query('CALL obtenerUsuarioTelefono(?)',[telefono])
+        
         if(result.length > 0){
+            const [user] = result
             const password = await hashData(pass)
-            await Coonexion.execute('UPDATE usuarios SET passwordUs = ? WHERE telefono = ?',[password, numero])
-            
-            return res.status(200).json([result[0]])
+            await Coonexion.execute('CALL actualizarPasswordPorTelefono(?, ?)',[password, telefono])
+            const token = await CreateAccessToken({id: user.id_usuario})
+            res.cookie('token', token)
+            return res.status(200).json([user])
         }
         return res.status(400).json(['Número no encontrado'])
     } catch (error) {
@@ -45,28 +54,27 @@ export const PostRegisterUID = async (req, res) =>{
     const {nombre,uid} =  req.body
     const rol = 1
     try {   
-        const [checkUid] = await Coonexion.query('SELECT * FROM usuarios WHERE nombre = ? AND UID = ?', [nombre,uid])
-        
-        if(checkUid.length > 0) {
-            const id = checkUid[0].id_usuario
+        console.log('entro aqui')
+        const [checkUid] = await Coonexion.query('CALL obtenerUsuarioNombreAndId(?, ?)', [nombre,uid])
+        if(checkUid[0].length > 0) {
+            const id = checkUid[0][0].id_usuario
             const token = await CreateAccessToken({id: id})
             
             res.cookie('token', token)
-            res.status(200).json([checkUid[0], 'login'])
+            res.status(200).json([checkUid[0][0], 'login'])
             return
-        } 
-        
-        const pass = await hashData(uid)
-        
-        const [insertUID] = await Coonexion.execute('INSERT INTO usuarios (nombre, passwordUs, UID, id_rol) VALUES (?,?,?,?)',[nombre,pass, uid, rol ])  
-        
-        const id = insertUID.insertId
-        const [lookforId] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario = ?', [id])
-        
-        const token = await CreateAccessToken({id: id})
-        
-        res.cookie('token', token)
-        res.status(200).json([lookforId[0], 'register'])
+        } else{
+            const pass = await hashData(uid)
+            
+            await Coonexion.execute('CALL insertarUsuarioFGA(?, ?, ?, ?)',[uid,nombre,pass,rol])  
+            
+            const [lookforId] = await Coonexion.query('CALL obtenerUsuarioID(?)', [uid])
+            
+            const token = await CreateAccessToken({id: uid})
+            
+            res.cookie('token', token)
+            res.status(200).json([lookforId[0][0], 'register'])
+        }
     } catch (error) {
         
         console.error('Error al buscar usuario en la base de datos', error)
@@ -83,11 +91,11 @@ export const verifYToken = async(req, res) =>{
             jwt.verify(token, TOKEN_SECRET, async (err, user) => {
                 if(err) return res.status(401).json({message:'Unauthorized'})
             
-            const [userFound] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario = ?', [user.id])
+            const [userFound] = await Coonexion.query('CALL obtenerUsuarioID(?)', [user.id])
             
-            if(!userFound) return res.status(401).json({message:'Unauthorized'})
+            if(!userFound[0]) return res.status(401).json({message:'Unauthorized'})
             
-            const dataUser = userFound[0]
+            const [[dataUser]] = userFound
             console.log(dataUser)
             return res.json({
                 id: dataUser.id_usuario,
@@ -102,10 +110,10 @@ export const verifYToken = async(req, res) =>{
 export const LoginClient =  async(req,res)=>{
     const {nombre, password} = req.body
     try {
-        const [result] = await Coonexion.query('SELECT * FROM usuarios WHERE nombre = ?', [nombre])
+        const [result] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
         
-        if(result.length > 0){
-            const user = result[0]
+        if(result[0].length > 0){
+            const [[user]] = result
             const PasswordValid = await compareData(password, user.passwordUs)
             
             if (!PasswordValid) return res.status(400).json( ["Contraseña incorrecta"] )
@@ -128,35 +136,33 @@ export const LoginClient =  async(req,res)=>{
 
 
 export const PostClientes = async (req,res)=>{
-    const {nombre, telefono, password} = req.body
+    const { uid, nombre, telefono, password } = req.body
     const rol = 1
+    const newId = uid ? uid : uuidv4()
+    
     try {
-        const [repeaterUser] = await Coonexion.query('SELECT * FROM usuarios WHERE nombre = ?', [nombre])
+        console.log(uid, nombre, telefono, password)
+        const [repeaterUser] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
+        if (repeaterUser[0].length > 0) return res.status(400).json(['El nombre de usuario ya está en uso'])
         
-        const [repeaterPhone] = await Coonexion.query('SELECT * FROM usuarios WHERE telefono = ?', [telefono])
-        
-        if(repeaterUser.length > 0) return res.status(400).json(['El nombre de usuario ya esta en uso'])
-        
-        if(repeaterPhone.length > 0) return res.status(400).json(['El numero de telefono ya esta en uso'])
+        const [repeaterPhone] = await Coonexion.query('CALL obtenerUsuarioTelefono(?)', [telefono])
+        if (repeaterPhone[0].length > 0) return res.status(400).json(['El número de teléfono ya está en uso'])
         
         const pass = await hashData(password)
         
-        const [rows] = await Coonexion.execute('INSERT INTO usuarios (nombre, telefono, passwordUs, UID ,id_rol) VALUES (?,?,?,?,?)',[nombre, telefono, pass, 'normal' ,rol])
+        await Coonexion.execute('CALL insertarUsuario(?, ?, ?, ?, ?)', [newId, nombre, telefono, pass, rol])
         
-        const idUser = rows.insertId
-        
-        const [resultUserData] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario=?',[idUser]) 
-        
+        const [resultUserData] = await Coonexion.execute('CALL obtenerUsuarioID(?)', [newId])
         const dataUser = resultUserData[0]
         
-        const token = await CreateAccessToken({id: idUser})
-        
+        const token = await CreateAccessToken({ id: newId })
         res.cookie('token', token)
         res.json({
             dataUser
         })
     } catch (error) {
-        res.status(500).json(['Error interno del servidor'] );
+        console.error(error);
+        res.status(500).json(['Error interno del servidor'])
     }
 }  
 
@@ -170,7 +176,7 @@ export const PostLogout = (req, res)=>{
 export const PostDataUser = async(req, res) =>{
     const {id} = req.body
     try {
-        const [result] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario = ?', [id])
+        const [result] = await Coonexion.query('CALL obtenerUsuarioID(?)', [id])
         res.json(result[0])
     } catch (error) {
         res.status(500).json(error)
