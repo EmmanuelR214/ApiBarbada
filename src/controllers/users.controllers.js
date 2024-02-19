@@ -109,15 +109,16 @@ export const verifYToken = async(req, res) =>{
 
 export const LoginClient =  async(req,res)=>{
     const {nombre, password} = req.body
+    console.log('entro', nombre, password)
     try {
         const [result] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
-        
+        console.log(result)
         if(result[0].length > 0){
             const [[user]] = result
             const PasswordValid = await compareData(password, user.passwordUs)
             
             if (!PasswordValid) return res.status(400).json( ["Contraseña incorrecta"] )
-            
+            console.log(user.id_usuario)
             const token = await CreateAccessToken({id: user.id_usuario})
             res.cookie('token', token)
             // ,{ maxAge: 86400000, httpOnly: true, sameSite: 'none', secure: true, httpOnly: false}
