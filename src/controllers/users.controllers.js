@@ -174,9 +174,9 @@ export const PostLogout = (req, res)=>{
 }
 
 export const PostDataUser = async(req, res) =>{
-    const {id} = req.body
+    
     try {
-        const [result] = await Coonexion.query('CALL obtenerUsuarioID(?)', [id])
+        const [result] = await Coonexion.query('SELECT * FROM usuarios')
         res.json(result[0])
     } catch (error) {
         res.status(500).json(error)
