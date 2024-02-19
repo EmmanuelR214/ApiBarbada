@@ -142,8 +142,8 @@ export const PostClientes = async (req,res)=>{
     const newId = uid ? uid : uuidv4()
     
     try {
-        console.log(uid, nombre, telefono, password)
         const [repeaterUser] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
+        console.log('entreo aqui')
         if (repeaterUser[0].length > 0) return res.status(400).json(['El nombre de usuario ya está en uso'])
         
         const [repeaterPhone] = await Coonexion.query('CALL obtenerUsuarioTelefono(?)', [telefono])
