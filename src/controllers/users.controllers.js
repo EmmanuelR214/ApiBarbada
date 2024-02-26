@@ -91,11 +91,11 @@ export const verifYToken = async(req, res) =>{
             jwt.verify(token, TOKEN_SECRET, async (err, user) => {
                 if(err) return res.status(401).json({message:'Unauthorized'})
             
-            const [userFound] = await Coonexion.query('SELECT * FROM usuarios WHERE id_usuario = ?', [user.id])
+            const [userFound] = await Coonexion.query('CALL obtenerUsuarioID(?)', [user.id])
             
-            if(!userFound) return res.status(401).json({message:'Unauthorized'})
+            if(!userFound[0]) return res.status(401).json({message:'Unauthorized'})
             
-            const dataUser = userFound[0]
+            const [[dataUser]] = userFound
             console.log(dataUser)
             return res.json({
                 id: dataUser.id_usuario,
@@ -141,7 +141,7 @@ export const PostClientes = async (req,res)=>{
     const { uid, nombre, telefono, password } = req.body
     const rol = 1
     const newId = uid ? uid : uuidv4()
-    
+    const fechaRegistro = new Date().toISOString().split('T')[0]
     try {
         const [repeaterUser] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
         console.log('entreo aqui')
@@ -152,7 +152,7 @@ export const PostClientes = async (req,res)=>{
         
         const pass = await hashData(password)
         
-        await Coonexion.execute('CALL insertarUsuario(?, ?, ?, ?, ?)', [newId, nombre, telefono, pass, rol])
+        await Coonexion.execute('CALL insertarUsuario(?, ?, ?, ?, ?,?)', [newId, nombre, telefono, pass, fechaRegistro, rol])
         
         const [resultUserData] = await Coonexion.execute('CALL obtenerUsuarioID(?)', [newId])
         const dataUser = resultUserData[0]
