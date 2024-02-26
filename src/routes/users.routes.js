@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {PostClientes,LoginClient, PostLogout, PostDataUser, verifYToken, PostRegisterUID, CompareUs} from "../controllers/users.controllers.js";
+import {PostClientes,LoginClient, PostLogout, PostDataUser, verifYToken, PostRegisterUID, CompareUs, BlockUser} from "../controllers/users.controllers.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
 import { registerSchema } from "../schemas/auth.schema.js";
 
@@ -24,6 +24,9 @@ router.post('/logout', PostLogout)
 
 //Trae los datos del usuario
 router.get('/dataUser',PostDataUser)
+
+//Bloquear usuario
+router.post('/block', BlockUser)
 
 export default router
 

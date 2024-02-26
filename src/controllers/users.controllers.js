@@ -141,6 +141,7 @@ export const PostClientes = async (req,res)=>{
     const { uid, nombre, telefono, password } = req.body
     const rol = 1
     const newId = uid ? uid : uuidv4()
+    const est = 'activa'
     const fechaRegistro = new Date().toISOString().split('T')[0]
     try {
         const [repeaterUser] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
@@ -152,7 +153,7 @@ export const PostClientes = async (req,res)=>{
         
         const pass = await hashData(password)
         
-        await Coonexion.execute('CALL insertarUsuario(?, ?, ?, ?, ?,?)', [newId, nombre, telefono, pass, fechaRegistro, rol])
+        await Coonexion.execute('CALL insertarUsuario(?, ?, ?, ?, ?, ?, ?)', [newId, nombre, telefono, pass, fechaRegistro, est, rol])
         
         const [resultUserData] = await Coonexion.execute('CALL obtenerUsuarioID(?)', [newId])
         const dataUser = resultUserData[0]
@@ -167,6 +168,17 @@ export const PostClientes = async (req,res)=>{
         res.status(500).json(['Error interno del servidor'])
     }
 }  
+
+export const BlockUser = async(req, res) =>{
+    const {nombre, pass} = req.body 
+    try {
+        const [user] = await Coonexion.query('CALL obtenerUsuarioNombre(?)', [nombre])
+        
+        await Coonexion.execute('CALL actualizarEstadoUsuario(?, ?)', [usuario_id, nuevo_estado]);
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const PostLogout = (req, res)=>{
     res.cookie('token', "", {
