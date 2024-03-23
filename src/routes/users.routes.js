@@ -1,32 +1,35 @@
 import { Router } from "express";
-import {PostClientes,LoginClient, PostLogout, PostDataUser, verifYToken, PostRegisterUID, CompareUs, BlockUser} from "../controllers/users.controllers.js";
+import {verifYToken, PostLogout, SearchNumberPhoneRegister, RegisterUser, LoginUser, RegisterFirebase, sendEmail, RecoverPasswordEmail, AlertUser} from "../controllers/users.controllers.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
 import { registerSchema } from "../schemas/auth.schema.js";
 
 const router = Router()
-
+//Comprobar si existe un token
 router.get('/verify', verifYToken)
 
-//crear un usuario
-router.post('/register', validateSchema(registerSchema), PostClientes)
+//Alerta a usuario
+router.get('/alertloging', AlertUser)
 
-//crear un usuario Google, facebook
-router.post('/registerFG',  PostRegisterUID)
+//Registro-Login Firbase
+router.post('/facegoo',RegisterFirebase)
 
-//Comparacion de usuario
-router.post('/compareUs', CompareUs)
+//Login user
+router.post('/login',LoginUser)
 
-//login
-router.post('/login', LoginClient)
+//Registrar usuario
+router.post('/register',RegisterUser)
 
-//Logout
-router.post('/logout', PostLogout)
+//Buscar ciente por telefono
+router.post('/searchPhone',SearchNumberPhoneRegister)
 
-//Trae los datos del usuario
-router.get('/dataUser',PostDataUser)
+//Enviar codigo
+router.post('/sendCodeEmail', sendEmail)
 
-//Bloquear usuario
-router.post('/block', BlockUser)
+//Actualizar contraseña por correo
+router.post('/recoverPass',RecoverPasswordEmail)
+
+//cerrar sesiones
+router.post('/logout',PostLogout)
 
 export default router
 
