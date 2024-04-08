@@ -33,24 +33,26 @@ const compareData = async (data, hash) => {
 export const verifYToken = async(req, res) =>{
     try {
         const {token} = req.cookies
-        if(!token) return res.status(401).json({message: 'Unauthorized'})
+        if(!token) return res.status(401).json(['Unauthorized'])
             jwt.verify(token, TOKEN_SECRET, async (err, user) => {
-                if(err) return res.status(401).json({message:'Unauthorized'})
+                if(err) return res.status(401).json(['Unauthorized'])
             
             const [userFound] = await Coonexion.query('CALL obtenerUsuarioID(?)', [user.id])
             
-            if(!userFound[0]) return res.status(401).json({message:'Unauthorized'})
+            if(!userFound[0]) return res.status(401).json(['Unauthorized'])
             
             const [[dataUser]] = userFound
             console.log(dataUser)
             return res.json({
                 id: dataUser.id_usuario,
+                rol: dataUser.roles
                 // nombre: dataUser.nombre,
                 // telefono: dataUser.telefono
             })
         })
     } catch (error) {
         console.log(error)
+        res.status(500).json(['Error del servidor'])
     }
 }
 
@@ -60,7 +62,7 @@ export const RecoverPasswordEmail = async(req, res) => {
         const {email, password, id} = req.body
         const ip = req.ip
         const pass = await hashData(password)
-        
+        console.log('chi')
         const [update] = await Coonexion.execute('CALL ActualizarPassword(?,?,?,?)',[pass, email, id, ip])
         
         if(update.affectedRows <= 0) return res.status(400).json(['No se pudo actualizar la contraseña'])
@@ -114,13 +116,17 @@ export const RegisterFirebase = async (req, res) =>{
         const estado = 1
         const [[result]] = await Coonexion.execute('CALL ObtenerUsuarioID(?)',[uid])
         if(result.length > 0){
-            let mensaje = `El usuario ${uid} inicio sésion con ${message}`
+            let mensaje = `El usuario ${correo} inicio sésion con ${message}`
             await Coonexion.execute('RegistroBitacoraUsuario(?,?,?)', [uid, ip, mensaje ])
             const token = await CreateAccessToken({id: uid})
             res.cookie('token', token)
             res.status(200).json([result[0], 'login'])
             return
         }else{
+            
+            const [[repeaterMail]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)',[correo])
+            if (repeaterMail.length > 0) return res.status(400).json(['El correo ya está en uso'])
+            
             let mensaje = `Nuevo usuario registrado con ${message}`
             const pass = await  hashData(uid)
             await Coonexion.execute('CALL RegistroUsuario(?,?,?,?,?,?,?,?)',[uid, correo, tel, pass, estado, rol, ip, mensaje])
@@ -180,7 +186,7 @@ export const RegisterUser = async(req, res) =>{
         let mensaje = `Nuevo usuario registrado`
         
         const [[repeaterMail]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)',[correo])
-        if (repeaterMail.length > 0) return res.status(400).json('El correo ya está en uso')
+        if (repeaterMail.length > 0) return res.status(400).json(['El correo ya está en uso'])
         
         const pass = await hashData(password)
         await Coonexion.execute('CALL RegistroUsuario(?,?,?,?,?,?,?,?)',[newId, correo, telefono, pass, estado, rol, ip, mensaje])
@@ -216,7 +222,7 @@ export const AlertUser = async(req, res) =>{
         const {alertUser} = req.cookies
         const ip = req.ip
         
-        const [[result]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)', [alertUser])
+        const [[result]] = await Coonexion.execute('CALL LoginCliente(?)', [alertUser])
         
         let mensaje = `usuario ${result[0].correo} ha intentado iniciar sésion repetitivamente`
         console.log(result[0].id_usuario) 
