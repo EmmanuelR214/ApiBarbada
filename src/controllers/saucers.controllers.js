@@ -98,8 +98,10 @@ export const ObtenerDetallesXprecio = async(req,res) =>{
 
 export const InsertPlatillo = async(req, res) =>{
   try {
-    const {nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional} = req.body
-    
+    const {nombre, descripcion, imagen, id_categoria, id_presentacion, id_tamaño, precio_adicional} = req.body
+    const id_sucursal = 1
+    const id_estadoPlatillo = 3
+    const platillo_disponible = 1
     console.log(nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional)
     
     
@@ -119,6 +121,9 @@ export const InsertPlatillo = async(req, res) =>{
 export const InsertShoppinCar = async(req, res) =>{
   try {
     const {id_platillo, id_usuario, cantidad, total} = req.body
+    
+    console.log(id_platillo, id_usuario, cantidad, total)
+    
     
     const [[searchPlatillo]] = await Coonexion.execute('CALL ObtenerCarrito(?)',[id_platillo])
     console.log(searchPlatillo, 'juan')

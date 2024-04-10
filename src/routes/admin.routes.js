@@ -1,8 +1,14 @@
 import { Router } from "express";
-import { GetClientes, LoginAdmin } from "../controllers/admin.controllers.js";
+import { verifYTokenAdmin, GetClientes, LoginAdmin, DataForNewPlatillo } from "../controllers/admin.controllers.js";
 import { authRequired } from "../middlewares/validateToke.js";
 
 const router = Router()
+
+//Comprobar Usuario
+router.get('/verify-admin', verifYTokenAdmin)
+
+//Traer datos 
+router.get('/datos', DataForNewPlatillo)
 
 //Traer tofos los clientes
 router.post('/clientes', authRequired, GetClientes)

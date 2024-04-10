@@ -94,7 +94,7 @@ export const sendEmail = async(req, res) =>{
         
         let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let codigoSecreto = '';
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 6; i++) {
             codigoSecreto += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
         }
         
@@ -163,7 +163,12 @@ export const LoginUser = async(req, res) => {
         await Coonexion.execute('CALL RegistroBitacoraUsuario(?,?,?)', [user.id_usuario, ip, mensaje ])
         
         const token = await CreateAccessToken({id: user.id_usuario})
-        
+        // const oneDayInSeconds = 24 * 60 * 60;
+        // const cookieOptions = {
+        //     maxAge: oneDayInSeconds * 1000, // Convertir segundos a milisegundos
+        //     httpOnly: true,
+        //     // Puedes agregar otras opciones como 'secure' si tu aplicación es HTTPS
+        // };
         res.cookie('token', token, {})
         // ,{ maxAge: 86400000, httpOnly: true, sameSite: 'none', secure: true, httpOnly: false}
         res.json({
@@ -171,6 +176,7 @@ export const LoginUser = async(req, res) => {
         })
         
     } catch (error) {
+        console.log(error)
         res.status(500).json(['Error al intentar iniciar sesion'])
     }
 }
