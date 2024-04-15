@@ -7,10 +7,11 @@ import indexRoutesAdmin from './routes/admin.routes.js'
 
 const app = express()
 
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174']
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    //origin: 'https://la-barbada2.vercel.app',
-    credentials: true
+    credentials: true,
+    origin: allowedOrigins,
 }));
 app.use(express.json())
 app.use(cookieParser())
@@ -30,3 +31,9 @@ app.use((req,res, next)=>{
 })
 
 export default app
+
+/*
+    origin: 'http://localhost:5173',
+    // origin: 'http://localhost:5174',
+    //origin: 'https://la-barbada2.vercel.app',
+*/

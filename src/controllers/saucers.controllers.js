@@ -96,28 +96,8 @@ export const ObtenerDetallesXprecio = async(req,res) =>{
   }
 }
 
-export const InsertPlatillo = async(req, res) =>{
-  try {
-    const {nombre, descripcion, imagen, id_categoria, id_presentacion, id_tamaño, precio_adicional} = req.body
-    const id_sucursal = 1
-    const id_estadoPlatillo = 3
-    const platillo_disponible = 1
-    console.log(nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional)
-    
-    
-    const [newSaucers] = await Coonexion.execute('CALL InsertarNuevoPlatillo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional])
-    
-    if (newSaucers.affectedRows > 0){
-      const [[result]] = await Coonexion.execute('SELECT * FROM platillos')
-      const [[result2]] = await Coonexion.execute('SELECT * FROM relacion_presentacion_tamaño') 
-      res.status(200).json([result, result2])
-    }
-  } catch (error) {
-    console.log(error)
-    res.status(500).json(['Error al insertar un platillo'])
-  }
-}
 
+//TODO: Carrito
 export const InsertShoppinCar = async(req, res) =>{
   try {
     const {id_platillo, id_usuario, cantidad, total} = req.body
@@ -162,6 +142,19 @@ export const GetShoppingCar = async(req,res) =>{
   }
 }
 
+export const DeleteCarrito = async(req, res) =>{
+  try {
+    const id_carrito = req.params.id_car
+    const [delet] = await Coonexion.execute('CALL EliminarItemCarrito(?)', [id_carrito]) 
+    if(delet.affectedRows === 0) return res.status(400).json(['Ocurrio un error al eliminar del carrito'])
+    res.status(200).json(['Se elimino del carrito'])
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(['Error al eliminar el carrito'])
+  }
+}
+
+//! Actualizar
 export const UpdateShoppingCar = async(req, res) =>{
   try {
     const {id_carrito, cantidad, subtotal} = req.body
@@ -175,18 +168,97 @@ export const UpdateShoppingCar = async(req, res) =>{
   }
 }
 
-export const DeleteCarrito = async(req, res) =>{
+
+//TODO: PARTEDE ADMIN
+
+export const TraerDatosPlatillo = async(req, res) =>{
   try {
-    const id_carrito = req.params.id_car
-    const [delet] = await Coonexion.execute('CALL EliminarItemCarrito(?)', [id_carrito]) 
-    if(delet.affectedRows === 0) return res.status(400).json(['Ocurrio un error al eliminar del carrito'])
-    res.status(200).json(['Se elimino del carrito'])
+    const [[Tamaños]] =  await Coonexion.execute('CALL ObtenerTamaños()')
+    const [[Categorias]] =  await Coonexion.execute('CALL ObtenerCategorias()')
+    const [[Presentaciones]] =  await Coonexion.execute('CALL ObtenerPresentaciones()')
+    res.status(200).json([Tamaños, Categorias, Presentaciones])
   } catch (error) {
     console.log(error)
-    res.status(500).json(['Error al eliminar el carrito'])
+    res.status(500).json(['Error al traer los datos del platillos'])
   }
 }
 
+
+//!Actualizar
+export const InsertPlatillo = async(req, res) =>{
+  try {
+    const {nombre, descripcion, imagen, id_categoria, id_presentacion, id_tamaño, precio_adicional} = req.body
+    const id_sucursal = 1
+    const id_estadoPlatillo = 3
+    const platillo_disponible = 1
+    console.log(nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional)
+    
+    
+    const [newSaucers] = await Coonexion.execute('CALL InsertarNuevoPlatillo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional])
+    
+    if (newSaucers.affectedRows > 0){
+      const [[result]] = await Coonexion.execute('SELECT * FROM platillos')
+      const [[result2]] = await Coonexion.execute('SELECT * FROM relacion_presentacion_tamaño') 
+      res.status(200).json([result, result2])
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(['Error al insertar un platillo'])
+  }
+}
+
+
+
+
+
+
+
+//TODO:
+// export const TraerCategorias = async(req, res) => {
+//   try {
+//     const [result] = await Coonexion.execute('SELECT DISTINCT c.id_categoria, c.nombreCategoria FROM categorias c JOIN platillos p ON c.id_categoria = p.id_categoria JOIN relacion_presentacion_tamaño rpt ON p.id_platillo = rpt.id_platillo')
+//     res.status(200).json([result])
+//   } catch (error) {
+//     res.status(500).json(['Error al traer las categorias'])
+//   }
+// }
+
+// export const FiltroCategoria = async(req, res) =>{
+//   try {
+//     const {id} = req.body
+//     const [result] = await Coonexion.execute('SELECT DISTINCT p.* FROM relacion_presentacion_tamaño rpt JOIN platillos p ON rpt.id_platillo = p.id_platillo WHERE p.id_categoria = ?',[id])
+//     res.status(200).json([result])
+//   } catch (error) {
+//     res.status(500).json(['Error al traer los platillos'])
+//   }
+// }
+
+// export const DescPlat = async(req, res) =>{
+//   try {
+//     const {id} = req.body
+//     const [res2] = await Coonexion.execute('SELECT DISTINCT rp.id_relacion, rp.id_presentacion, pr.nombrePresentacion, rp.id_tamaño, tp.tamaño FROM relacion_presentacion_tamaño rp JOIN presentaciones pr ON rp.id_presentacion = pr.id_presentacion JOIN tamaño_platillo tp ON rp.id_tamaño = tp.id_tamaño WHERE rp.id_platillo = ?',[id])
+//     res.status(200).json([res2])
+//   } catch (error) {
+//     res.status(500).json(['Error al traer los platillos'])
+//   }
+// }
+
+
+// export const TraerVentas = async (req, res) => {
+//   try {
+//     const { mes, platillo } = req.body;
+//     const [result] = await Coonexion.execute('SELECT * FROM ventas v INNER JOIN descripcion_ventas dv ON v.id_venta = dv.id_venta WHERE MONTH(v.fecha_venta) = ? AND YEAR(v.fecha_venta) = 2024 AND dv.id_relacion = ?', [mes, platillo]);
+
+//     const totalVentas = result.length; 
+    
+//     console.log(result);
+//     console.log(totalVentas);
+//     res.status(200).json([totalVentas]);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: 'Error al traer las ventas del mes' });
+//   }
+// };
 
 /*//Buscar un solo producto
 export const getBuscarPlatillo = async (req,res) =>{

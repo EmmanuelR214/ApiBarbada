@@ -26,9 +26,9 @@ const hashData = async (data) => {
 
 export const verifYTokenAdmin = async(req, res) =>{
     try {
-        const {token} = req.cookies
-        if(!token) return res.status(401).json(['Unauthorized'])
-            jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+        const {tokenadmin} = req.cookies
+        if(!tokenadmin) return res.status(401).json(['Unauthorized'])
+            jwt.verify(tokenadmin, TOKEN_SECRET, async (err, user) => {
                 if(err) return res.status(401).json(['Unauthorized'])
             
             const [userFound] = await Coonexion.query('CALL obtenerUsuarioID(?)', [user.id])
@@ -68,7 +68,7 @@ export const LoginAdmin = async(req, res) =>{
         
         const token = await CreateAccessToken({id: user.id_usuario})
         
-        res.cookie('token', token, {})
+        res.cookie('tokenadmin', token, {})
         res.json([user.id_usuario, user.roles])
     } catch (error) {
         console.log(error)
@@ -76,6 +76,13 @@ export const LoginAdmin = async(req, res) =>{
     }
 }
 
+
+
+
+
+
+
+/*
 export const DataForNewPlatillo = async(req, res) =>{
     try {
         const gu = 'guarnicion'
@@ -92,3 +99,4 @@ export const DataForNewPlatillo = async(req, res) =>{
         res.status(500).json(['Hubo un error al obtener los datos'])
     }
 }
+*/
