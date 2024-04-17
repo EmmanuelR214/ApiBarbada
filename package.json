@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
+    "dev": "nodemon index.js --exec babel-node",
     "start": "node build/index.js",
-    "build": "babel index.js --out-dir build"
+    "build": "babel src --out-dir build"
   },
   "keywords": [],
   "author": "",

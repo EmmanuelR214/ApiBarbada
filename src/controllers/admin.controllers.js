@@ -56,9 +56,9 @@ export const GetClientes = async (req,res)=>{
 export const LoginAdmin = async(req, res) =>{
     try {
         const {telefono, password} = req.body
-        const [[result]] = await Coonexion.execute('CALL ObtenerUsuarioTelefono(?)',[telefono])
+        const [[result]] = await Coonexion.execute('CALL LoginCliente(?)',[telefono])
         const user = result[0]
-        
+        console.log(user)
         if(!user) return res.status(400).json(['El usuario no coincide'])
         
         if(user.roles === 'cliente') return res.status(400).json(['No tienes permisos para acceder'])
@@ -67,7 +67,8 @@ export const LoginAdmin = async(req, res) =>{
         if (!PasswordValid) return res.status(400).json( ["Contraseña incorrecta"] )
         
         const token = await CreateAccessToken({id: user.id_usuario})
-        
+        const tokenRol = await CreateAccessToken({rol: user.roles})
+        res.cookie('rol', tokenRol, {})
         res.cookie('tokenadmin', token, {})
         res.json([user.id_usuario, user.roles])
     } catch (error) {

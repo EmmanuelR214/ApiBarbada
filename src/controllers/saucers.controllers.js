@@ -176,42 +176,68 @@ export const TraerDatosPlatillo = async(req, res) =>{
     const [[Tamaños]] =  await Coonexion.execute('CALL ObtenerTamaños()')
     const [[Categorias]] =  await Coonexion.execute('CALL ObtenerCategorias()')
     const [[Presentaciones]] =  await Coonexion.execute('CALL ObtenerPresentaciones()')
-    res.status(200).json([Tamaños, Categorias, Presentaciones])
+    const [[Platillos]] =  await Coonexion.execute('CALL ObtenerPlatillosRecomendacion()')
+    const [[Guarniciones]] = await Coonexion.execute('CALL ObtenerGuarniciones()')
+    res.status(200).json([Tamaños, Categorias, Presentaciones, Platillos, Guarniciones])
   } catch (error) {
     console.log(error)
     res.status(500).json(['Error al traer los datos del platillos'])
   }
 }
 
-
-//!Actualizar
-export const InsertPlatillo = async(req, res) =>{
+export const TraerDatosPlatilloActualizar = async(req, res) =>{
   try {
-    const {nombre, descripcion, imagen, id_categoria, id_presentacion, id_tamaño, precio_adicional} = req.body
-    const id_sucursal = 1
-    const id_estadoPlatillo = 3
-    const platillo_disponible = 1
-    console.log(nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional)
-    
-    
-    const [newSaucers] = await Coonexion.execute('CALL InsertarNuevoPlatillo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[nombre, descripcion, imagen, platillo_disponible, id_estadoPlatillo, id_categoria, id_sucursal, id_presentacion, id_tamaño, precio_adicional])
-    
-    if (newSaucers.affectedRows > 0){
-      const [[result]] = await Coonexion.execute('SELECT * FROM platillos')
-      const [[result2]] = await Coonexion.execute('SELECT * FROM relacion_presentacion_tamaño') 
-      res.status(200).json([result, result2])
-    }
+    const {id} = req.body
+    const [[platilloGeneral]] = await Coonexion.execute('CALL DatosActualizarPlatillo(?)',[id])
+      res.status(200).json([platilloGeneral]);
   } catch (error) {
     console.log(error)
-    res.status(500).json(['Error al insertar un platillo'])
+    res.status(500).json(['Error al traer los datos del platillos'])
   }
 }
 
+export const InsertPlatillo = async (req, res) => {
+  try {
+    const { platillo, descripcion, categoria, imagen, combinaciones, extras, guarniciones } = req.body;
+    // Insertar el nuevo platillo en la tabla de platillos
+    const [result] = await Coonexion.execute('INSERT INTO platillos (nombre, descripcion, imagen, id_estadoPlatillo, id_categoria, id_sucursal, platillo_disponible) VALUES (?, ?, ?, ?, ?, ?, ?)', [platillo, descripcion, imagen, 3, categoria, 1, true]);
+    const nuevoIdPlatillo = result.insertId;
+    // Insertar las combinaciones de presentaciones y tamaños en la tabla de relacion_presentacion_tamaño
+    for (const combinacion of combinaciones) {
+      const { tamaño, presentacion, valor } = combinacion;
+      const idTamaño = tamaño.value;
+      const idPresentacion = presentacion.value;
+      const precioAdicional = valor;
+      await Coonexion.execute('INSERT INTO relacion_presentacion_tamaño (id_platillo, id_presentacion, id_tamaño, precio_adicional) VALUES (?, ?, ?, ?)', [nuevoIdPlatillo, idPresentacion, idTamaño, precioAdicional]);
+    }
+    // Insertar las recomendaciones en la tabla de recomendaciones
+    for (const extra of extras) {
+      const { value, label, precio } = extra;
+      const idPlatilloRecomendado = value;
+      const tipo = 'acompañamiento';
+      await Coonexion.execute('INSERT INTO recomendaciones (id_platillo_principal, id_platillo_recomendado, tipo) VALUES (?, ?, ?)', [nuevoIdPlatillo, idPlatilloRecomendado, tipo]);
+    }
+    for (const guarnicion of guarniciones) {
+      const { value, label, precio } = guarnicion;
+      const idPlatilloRecomendado = value;
+      const tipo = 'guarnicion';
+      await Coonexion.execute('INSERT INTO recomendaciones (id_platillo_principal, id_platillo_recomendado, tipo) VALUES (?, ?, ?)', [nuevoIdPlatillo, idPlatilloRecomendado, tipo]);
+    }
+    res.status(200).json({ message: 'Platillo insertado exitosamente.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Error al insertar un platillo.' });
+  }
+};
 
-
-
-
-
+export const MostrarPlatillosAdmin = async(req, res) =>{
+  try {
+    const [[result]] = await Coonexion.execute('CALL ObtenerListaPlatillo()')
+    res.status(200).json([result])
+  } catch (error) {
+    res.status(500).json(['Error al traer los platillos'])
+  }
+}
 
 //TODO:
 // export const TraerCategorias = async(req, res) => {

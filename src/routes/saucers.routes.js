@@ -6,9 +6,11 @@ import {
   GetShoppingCar, 
   InsertPlatillo, 
   InsertShoppinCar, 
+  MostrarPlatillosAdmin, 
   ObtenerDetallesXprecio, 
   ObtenerPrecio, 
   TraerDatosPlatillo, 
+  TraerDatosPlatilloActualizar, 
   UpdateShoppingCar
 } from "../controllers/saucers.controllers.js";
 
@@ -17,6 +19,12 @@ const router = Router()
 
 //Traer menú
 router.get('/menu', GetMenu)
+
+//mostrar lista de platillos
+router.get('/lista-platillos', MostrarPlatillosAdmin)
+
+//Traer datos a actualizar
+router.post('/platillo-actializar', TraerDatosPlatilloActualizar)
 
 //*Detalle del producto
 //Traer descripcion del platillo 
@@ -49,6 +57,7 @@ router.put('/update-shoppingcar', UpdateShoppingCar)
 
 //insertar platillo
 router.post('/new-platillo', InsertPlatillo)
+
 
 export default router
 

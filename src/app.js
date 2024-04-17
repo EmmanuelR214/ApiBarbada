@@ -8,9 +8,9 @@ import indexRoutesAdmin from './routes/admin.routes.js'
 const app = express()
 
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174']
+// const allowedOrigins = ['amdin.labarbada.store ', 'labarbada.store']
 
 app.use(cors({
-    //origin: 'http://localhost:5173',
     origin: allowedOrigins,
     credentials: true
 }));
