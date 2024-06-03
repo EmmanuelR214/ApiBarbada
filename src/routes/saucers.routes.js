@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   DeleteCarrito, 
   DescripcionPlatillo, 
+  EliminarPlatillo, 
   GetMenu, 
   GetShoppingCar, 
   InsertPlatillo, 
@@ -51,13 +52,14 @@ router.get('/get-shoppingCar/:idUser', GetShoppingCar)
 //Eliminar del carrito
 router.delete('/delete-shoppingcar/:id_car', DeleteCarrito)
 
-
+//traer el carrito
 //!Actualizar funciones y rutas
 router.put('/update-shoppingcar', UpdateShoppingCar)
 
 //insertar platillo
 router.post('/new-platillo', InsertPlatillo)
 
+router.post('/eliminarPlatillo', EliminarPlatillo)
 
 export default router
 

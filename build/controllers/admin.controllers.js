@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifYTokenAdmin = exports.LoginAdmin = exports.GetClientes = void 0;
+exports.verifYTokenAdmin = exports.TraerReporteVentas = exports.LoginAdmin = exports.GetClientes = void 0;
 var _db = require("../db.js");
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 var _jwt = require("../libs/jwt.js");
@@ -113,12 +113,11 @@ var verifYTokenAdmin = exports.verifYTokenAdmin = /*#__PURE__*/function () {
                     return _context3.abrupt("return", res.status(401).json(['Unauthorized']));
                   case 9:
                     _userFound = _slicedToArray(userFound, 1), _userFound$ = _slicedToArray(_userFound[0], 1), dataUser = _userFound$[0];
-                    console.log(dataUser);
                     return _context3.abrupt("return", res.json({
                       id: dataUser.id_usuario,
                       rol: dataUser.roles
                     }));
-                  case 12:
+                  case 11:
                   case "end":
                     return _context3.stop();
                 }
@@ -163,65 +162,104 @@ var GetClientes = exports.GetClientes = /*#__PURE__*/function () {
 }();
 var LoginAdmin = exports.LoginAdmin = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
-    var _req$body, telefono, password, _yield$Coonexion$exec, _yield$Coonexion$exec2, _yield$Coonexion$exec3, result, user, PasswordValid, token;
+    var _req$body, telefono, password, _yield$Coonexion$exec, _yield$Coonexion$exec2, _yield$Coonexion$exec3, result, user, PasswordValid, token, tokenRol;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
           _context6.prev = 0;
           _req$body = req.body, telefono = _req$body.telefono, password = _req$body.password;
           _context6.next = 4;
-          return _db.Coonexion.execute('CALL ObtenerUsuarioTelefono(?)', [telefono]);
+          return _db.Coonexion.execute('CALL LoginCliente(?)', [telefono]);
         case 4:
           _yield$Coonexion$exec = _context6.sent;
           _yield$Coonexion$exec2 = _slicedToArray(_yield$Coonexion$exec, 1);
           _yield$Coonexion$exec3 = _slicedToArray(_yield$Coonexion$exec2[0], 1);
           result = _yield$Coonexion$exec3[0];
           user = result[0];
+          console.log(user);
           if (user) {
-            _context6.next = 11;
+            _context6.next = 12;
             break;
           }
           return _context6.abrupt("return", res.status(400).json(['El usuario no coincide']));
-        case 11:
+        case 12:
           if (!(user.roles === 'cliente')) {
-            _context6.next = 13;
+            _context6.next = 14;
             break;
           }
           return _context6.abrupt("return", res.status(400).json(['No tienes permisos para acceder']));
-        case 13:
-          _context6.next = 15;
+        case 14:
+          _context6.next = 16;
           return compareData(password, user.passwordUs);
-        case 15:
+        case 16:
           PasswordValid = _context6.sent;
           if (PasswordValid) {
-            _context6.next = 18;
+            _context6.next = 19;
             break;
           }
           return _context6.abrupt("return", res.status(400).json(["Contraseña incorrecta"]));
-        case 18:
-          _context6.next = 20;
+        case 19:
+          _context6.next = 21;
           return (0, _jwt.CreateAccessToken)({
             id: user.id_usuario
           });
-        case 20:
+        case 21:
           token = _context6.sent;
+          _context6.next = 24;
+          return (0, _jwt.CreateAccessToken)({
+            rol: user.roles
+          });
+        case 24:
+          tokenRol = _context6.sent;
+          res.cookie('rol', tokenRol, {});
           res.cookie('tokenadmin', token, {});
           res.json([user.id_usuario, user.roles]);
-          _context6.next = 29;
+          _context6.next = 34;
           break;
-        case 25:
-          _context6.prev = 25;
+        case 30:
+          _context6.prev = 30;
           _context6.t0 = _context6["catch"](0);
           console.log(_context6.t0);
           res.status(500).json(['Error al iniciar sesión']);
-        case 29:
+        case 34:
         case "end":
           return _context6.stop();
       }
-    }, _callee6, null, [[0, 25]]);
+    }, _callee6, null, [[0, 30]]);
   }));
   return function LoginAdmin(_x10, _x11) {
     return _ref6.apply(this, arguments);
+  };
+}();
+var TraerReporteVentas = exports.TraerReporteVentas = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+    var _yield$Coonexion$exec4, _yield$Coonexion$exec5, result;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          _context7.prev = 0;
+          _context7.next = 3;
+          return _db.Coonexion.execute('SELECT v.id_venta, u.correo AS nombre_usuario, v.estado_pedido, d.direccion AS descripcion_direccion, v.fecha_venta FROM ventas v JOIN usuarios u ON v.id_usuario = u.id_usuario JOIN direcciones d ON v.id_direccion = d.id_direccion JOIN descripcion_ventas dv ON v.id_venta = dv.id_venta');
+        case 3:
+          _yield$Coonexion$exec4 = _context7.sent;
+          _yield$Coonexion$exec5 = _slicedToArray(_yield$Coonexion$exec4, 1);
+          result = _yield$Coonexion$exec5[0];
+          res.status(200).json(result);
+          _context7.next = 13;
+          break;
+        case 9:
+          _context7.prev = 9;
+          _context7.t0 = _context7["catch"](0);
+          console.log(_context7.t0);
+          res.status(500).json(['Error del servidor']);
+        case 13:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[0, 9]]);
+  }));
+  return function TraerReporteVentas(_x12, _x13) {
+    return _ref7.apply(this, arguments);
   };
 }();
 

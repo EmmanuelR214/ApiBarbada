@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifYToken = exports.sendEmail = exports.SearchNumberPhoneRegister = exports.RegisterUser = exports.RegisterFirebase = exports.RecoverPasswordEmail = exports.PostLogout = exports.LoginUser = exports.AlertUser = void 0;
+exports.verifYToken = exports.sendEmail = exports.TraerDireccionUser = exports.SearchNumberPhoneRegister = exports.RegisterUser = exports.RegisterFirebase = exports.RecoverPasswordEmail = exports.PostLogout = exports.LoginUser = exports.InsertarDireccion = exports.AlertUser = void 0;
 var _db = require("../db.js");
 var _uuid = require("uuid");
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
@@ -598,6 +598,74 @@ var PostLogout = exports.PostLogout = function PostLogout(req, res) {
   });
   return res.sendStatus(200);
 };
+var TraerDireccionUser = exports.TraerDireccionUser = /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req, res) {
+    var id, _yield$Coonexion$exec37, _yield$Coonexion$exec38, _yield$Coonexion$exec39, result, _yield$Coonexion$exec40, _yield$Coonexion$exec41, result2;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          id = req.params.idUser;
+          _context12.next = 4;
+          return _db.Coonexion.execute('CALL ObtenerDirecciones(?)', [id]);
+        case 4:
+          _yield$Coonexion$exec37 = _context12.sent;
+          _yield$Coonexion$exec38 = _slicedToArray(_yield$Coonexion$exec37, 1);
+          _yield$Coonexion$exec39 = _slicedToArray(_yield$Coonexion$exec38[0], 1);
+          result = _yield$Coonexion$exec39[0];
+          _context12.next = 10;
+          return _db.Coonexion.execute('SELECT ad.id_apodo, ad.apodo_direccion, i.url_icono FROM apodos_direcciones ad INNER JOIN iconos i ON ad.id_icono = i.id_icono');
+        case 10:
+          _yield$Coonexion$exec40 = _context12.sent;
+          _yield$Coonexion$exec41 = _slicedToArray(_yield$Coonexion$exec40, 1);
+          result2 = _yield$Coonexion$exec41[0];
+          res.status(200).json([result, result2]);
+          _context12.next = 20;
+          break;
+        case 16:
+          _context12.prev = 16;
+          _context12.t0 = _context12["catch"](0);
+          console.log(_context12.t0);
+          res.status(500).json(['Error al traer direcciones']);
+        case 20:
+        case "end":
+          return _context12.stop();
+      }
+    }, _callee12, null, [[0, 16]]);
+  }));
+  return function TraerDireccionUser(_x22, _x23) {
+    return _ref12.apply(this, arguments);
+  };
+}();
+var InsertarDireccion = exports.InsertarDireccion = /*#__PURE__*/function () {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(req, res) {
+    var _req$body5, direccion, descripcion, id_usuario, id_apodo;
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      while (1) switch (_context13.prev = _context13.next) {
+        case 0:
+          _context13.prev = 0;
+          _req$body5 = req.body, direccion = _req$body5.direccion, descripcion = _req$body5.descripcion, id_usuario = _req$body5.id_usuario, id_apodo = _req$body5.id_apodo;
+          _context13.next = 4;
+          return _db.Coonexion.execute('CALL InsertarDireccion(?, ?, ?, ?)', [direccion, descripcion, id_usuario, id_apodo]);
+        case 4:
+          res.status(200).json(['Dirección agregada']);
+          _context13.next = 11;
+          break;
+        case 7:
+          _context13.prev = 7;
+          _context13.t0 = _context13["catch"](0);
+          console.log(_context13.t0);
+          res.status(500).json(['Error al insertar la dirección']);
+        case 11:
+        case "end":
+          return _context13.stop();
+      }
+    }, _callee13, null, [[0, 7]]);
+  }));
+  return function InsertarDireccion(_x24, _x25) {
+    return _ref13.apply(this, arguments);
+  };
+}();
 
 /*
 export const BlockUser = async(req, res) =>{

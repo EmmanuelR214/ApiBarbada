@@ -8,12 +8,22 @@ var _express = require("express");
 var _usersControllers = require("../controllers/users.controllers.js");
 var _validatorMiddleware = require("../middlewares/validator.middleware.js");
 var _authSchema = require("../schemas/auth.schema.js");
+var _saucersControllers = require("../controllers/saucers.controllers.js");
 var router = (0, _express.Router)();
 //Comprobar si existe un token
 router.get('/verify', _usersControllers.verifYToken);
 
 //Alerta a usuario
 router.get('/alertloging', _usersControllers.AlertUser);
+
+//traer direccion usuario
+router.get('/direcciones/:idUser', _usersControllers.TraerDireccionUser);
+
+//Insertar dioreccion
+router.post('/insertarDireccion', _usersControllers.InsertarDireccion);
+
+//CREAR VENTA
+router.post('/venta', _saucersControllers.CrearVenta);
 
 //Registro-Login Firbase
 router.post('/facegoo', _usersControllers.RegisterFirebase);

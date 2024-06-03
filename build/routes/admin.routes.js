@@ -17,5 +17,8 @@ router.post('/clientes', _validateToke.authRequired, _adminControllers.GetClient
 
 //Login Admin
 router.post('/login-admin', _adminControllers.LoginAdmin);
+
+//Traer venta general
+router.get('/ventageneral', _adminControllers.TraerReporteVentas);
 var _default = exports["default"] = router; // //Traer datos 
 // router.get('/datos', DataForNewPlatillo)

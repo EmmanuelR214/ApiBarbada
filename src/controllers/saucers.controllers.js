@@ -6,14 +6,9 @@ export const GetMenu = async (req, res) => {
     const {categoria, platillo} = req.body
     let query = 'CALL ObtenerMenu()'
     
-    // if(categoria) query = ''
-    
-    
-    
-    const [[result]] = await Coonexion.execute('CALL ObtenerMenu()')
+    const [[result]] = await Coonexion.execute(query);
     const [[category]] = await Coonexion.execute('CALL ObtenerCategorias()')
     
-    console.log(result)
     res.json([result, category])
   } catch (error) {
     console.error(error)
@@ -238,6 +233,59 @@ export const MostrarPlatillosAdmin = async(req, res) =>{
     res.status(500).json(['Error al traer los platillos'])
   }
 }
+
+export const EliminarPlatillo = async(req, res) =>{
+  try {
+    const {id} = req.body;
+    const [result] = await Coonexion.execute('SELECT id_platillo FROM relacion_presentacion_tamaño WHERE id_relacion = ?', [id]);
+    const idPlato = result[0].id_platillo;
+    
+    // Eliminar filas de la tabla recomendaciones que hacen referencia a la fila que se eliminará en la tabla relacion_presentacion_tamaño
+    await Coonexion.execute('DELETE FROM recomendaciones WHERE id_platillo_recomendado IN (SELECT id_relacion FROM relacion_presentacion_tamaño WHERE id_platillo = ?)', [idPlato]);
+    
+    // Luego, eliminar la fila de la tabla relacion_presentacion_tamaño
+    await Coonexion.execute('DELETE FROM relacion_presentacion_tamaño WHERE id_platillo = ?', [idPlato]);
+    
+    // Finalmente, eliminar la fila de la tabla platillos
+    await Coonexion.execute('DELETE FROM platillos WHERE id_platillo = ?', [idPlato])
+    
+    res.status(200).json(['Platillo Eliminado']);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(['Error al eliminar el platillo']);
+  }
+}
+
+export const CrearVenta = async(req, res) =>{
+  try {
+    const { id_usuario, sumaSubtotales, id_direccion, metodoPago, precio, cambio, carrito } = req.body;
+    const fechaActual = new Date();
+    const estado = 'Pendiente';
+    //Insertar en la tabla de ventas
+    const [ventaResult] = await Coonexion.execute('INSERT INTO ventas (id_usuario, total, estado_pedido, fecha_venta, id_direccion, id_metodo_pago, monto_pagado, cambio_devuelto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [id_usuario, sumaSubtotales, estado, fechaActual, id_direccion, metodoPago, precio, cambio]);
+    const ventaId = ventaResult.insertId;
+    // Insertar en la tabla de descripcion_ventas
+    for (const item of carrito) {
+      const { id_relacion, cantidad, subtotal } = item;
+      await Coonexion.execute('INSERT INTO descripcion_ventas (id_venta, id_relacion, cantidad, subtotal) VALUES (?, ?, ?, ?)', [ventaId, id_relacion, cantidad, subtotal]);
+    }
+    for (const item of carrito) {
+      const { id_carrito } = item;
+      // Eliminar el elemento del carrito en la base de datos
+      await Coonexion.execute('DELETE FROM carrito WHERE id_carrito = ?', [id_carrito]);
+    }
+    
+    //Otras acciones según sea necesario (por ejemplo, actualizar inventario)
+    res.status(200).json(['Compra realizada exitosamente']);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al procesar la compra' });
+  }
+}
+
+
+
+
 
 //TODO:
 // export const TraerCategorias = async(req, res) => {

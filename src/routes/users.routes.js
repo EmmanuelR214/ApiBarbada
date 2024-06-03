@@ -1,7 +1,8 @@
 import { Router } from "express";
-import {verifYToken, PostLogout, SearchNumberPhoneRegister, RegisterUser, LoginUser, RegisterFirebase, sendEmail, RecoverPasswordEmail, AlertUser} from "../controllers/users.controllers.js";
+import {verifYToken, PostLogout, SearchNumberPhoneRegister, RegisterUser, LoginUser, RegisterFirebase, sendEmail, RecoverPasswordEmail, AlertUser, TraerDireccionUser, InsertarDireccion} from "../controllers/users.controllers.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
 import { registerSchema } from "../schemas/auth.schema.js";
+import { CrearVenta } from "../controllers/saucers.controllers.js";
 
 const router = Router()
 //Comprobar si existe un token
@@ -9,6 +10,18 @@ router.get('/verify', verifYToken)
 
 //Alerta a usuario
 router.get('/alertloging', AlertUser)
+
+//traer direccion usuario
+router.get('/direcciones/:idUser', TraerDireccionUser)
+
+//Insertar dioreccion
+router.post('/insertarDireccion', InsertarDireccion)
+
+
+//CREAR VENTA
+router.post('/venta', CrearVenta)
+
+
 
 //Registro-Login Firbase
 router.post('/facegoo',RegisterFirebase)

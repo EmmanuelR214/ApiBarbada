@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UpdateShoppingCar = exports.TraerDatosPlatillo = exports.ObtenerPrecio = exports.ObtenerDetallesXprecio = exports.MostrarPlatillosAdmin = exports.InsertShoppinCar = exports.InsertPlatillo = exports.GetShoppingCar = exports.GetMenu = exports.DescripcionPlatillo = exports.DeleteCarrito = void 0;
+exports.UpdateShoppingCar = exports.TraerDatosPlatilloActualizar = exports.TraerDatosPlatillo = exports.ObtenerPrecio = exports.ObtenerDetallesXprecio = exports.MostrarPlatillosAdmin = exports.InsertShoppinCar = exports.InsertPlatillo = exports.GetShoppingCar = exports.GetMenu = exports.EliminarPlatillo = exports.DescripcionPlatillo = exports.DeleteCarrito = exports.CrearVenta = void 0;
 var _db = require("../db.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -25,9 +25,9 @@ var GetMenu = exports.GetMenu = /*#__PURE__*/function () {
         case 0:
           _context.prev = 0;
           _req$body = req.body, categoria = _req$body.categoria, platillo = _req$body.platillo;
-          query = 'CALL ObtenerMenu()'; // if(categoria) query = ''
+          query = 'CALL ObtenerMenu()';
           _context.next = 5;
-          return _db.Coonexion.execute('CALL ObtenerMenu()');
+          return _db.Coonexion.execute(query);
         case 5:
           _yield$Coonexion$exec = _context.sent;
           _yield$Coonexion$exec2 = _slicedToArray(_yield$Coonexion$exec, 1);
@@ -40,20 +40,19 @@ var GetMenu = exports.GetMenu = /*#__PURE__*/function () {
           _yield$Coonexion$exec5 = _slicedToArray(_yield$Coonexion$exec4, 1);
           _yield$Coonexion$exec6 = _slicedToArray(_yield$Coonexion$exec5[0], 1);
           category = _yield$Coonexion$exec6[0];
-          console.log(result);
           res.json([result, category]);
-          _context.next = 23;
+          _context.next = 22;
           break;
-        case 19:
-          _context.prev = 19;
+        case 18:
+          _context.prev = 18;
           _context.t0 = _context["catch"](0);
           console.error(_context.t0);
           res.status(500).json(['Error al traer el Menú']);
-        case 23:
+        case 22:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 19]]);
+    }, _callee, null, [[0, 18]]);
   }));
   return function GetMenu(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -464,27 +463,60 @@ var TraerDatosPlatillo = exports.TraerDatosPlatillo = /*#__PURE__*/function () {
     return _ref9.apply(this, arguments);
   };
 }();
-var InsertPlatillo = exports.InsertPlatillo = /*#__PURE__*/function () {
+var TraerDatosPlatilloActualizar = exports.TraerDatosPlatilloActualizar = /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(req, res) {
-    var _req$body6, platillo, descripcion, categoria, imagen, combinaciones, extras, guarniciones, _yield$Coonexion$exec48, _yield$Coonexion$exec49, result, nuevoIdPlatillo, _iterator, _step, combinacion, tamaño, presentacion, valor, idTamaño, idPresentacion, precioAdicional, _iterator2, _step2, extra, value, label, precio, idPlatilloRecomendado, tipo, _iterator3, _step3, guarnicion, _value, _label, _precio, _idPlatilloRecomendado, _tipo;
+    var id, _yield$Coonexion$exec48, _yield$Coonexion$exec49, _yield$Coonexion$exec50, platilloGeneral;
     return _regeneratorRuntime().wrap(function _callee10$(_context10) {
       while (1) switch (_context10.prev = _context10.next) {
         case 0:
           _context10.prev = 0;
-          _req$body6 = req.body, platillo = _req$body6.platillo, descripcion = _req$body6.descripcion, categoria = _req$body6.categoria, imagen = _req$body6.imagen, combinaciones = _req$body6.combinaciones, extras = _req$body6.extras, guarniciones = _req$body6.guarniciones; // Insertar el nuevo platillo en la tabla de platillos
+          id = req.body.id;
           _context10.next = 4;
-          return _db.Coonexion.execute('INSERT INTO platillos (nombre, descripcion, imagen, id_estadoPlatillo, id_categoria, id_sucursal, platillo_disponible) VALUES (?, ?, ?, ?, ?, ?, ?)', [platillo, descripcion, imagen, 3, categoria, 1, true]);
+          return _db.Coonexion.execute('CALL DatosActualizarPlatillo(?)', [id]);
         case 4:
           _yield$Coonexion$exec48 = _context10.sent;
           _yield$Coonexion$exec49 = _slicedToArray(_yield$Coonexion$exec48, 1);
-          result = _yield$Coonexion$exec49[0];
+          _yield$Coonexion$exec50 = _slicedToArray(_yield$Coonexion$exec49[0], 1);
+          platilloGeneral = _yield$Coonexion$exec50[0];
+          res.status(200).json([platilloGeneral]);
+          _context10.next = 15;
+          break;
+        case 11:
+          _context10.prev = 11;
+          _context10.t0 = _context10["catch"](0);
+          console.log(_context10.t0);
+          res.status(500).json(['Error al traer los datos del platillos']);
+        case 15:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee10, null, [[0, 11]]);
+  }));
+  return function TraerDatosPlatilloActualizar(_x19, _x20) {
+    return _ref10.apply(this, arguments);
+  };
+}();
+var InsertPlatillo = exports.InsertPlatillo = /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(req, res) {
+    var _req$body6, platillo, descripcion, categoria, imagen, combinaciones, extras, guarniciones, _yield$Coonexion$exec51, _yield$Coonexion$exec52, result, nuevoIdPlatillo, _iterator, _step, combinacion, tamaño, presentacion, valor, idTamaño, idPresentacion, precioAdicional, _iterator2, _step2, extra, value, label, precio, idPlatilloRecomendado, tipo, _iterator3, _step3, guarnicion, _value, _label, _precio, _idPlatilloRecomendado, _tipo;
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.prev = 0;
+          _req$body6 = req.body, platillo = _req$body6.platillo, descripcion = _req$body6.descripcion, categoria = _req$body6.categoria, imagen = _req$body6.imagen, combinaciones = _req$body6.combinaciones, extras = _req$body6.extras, guarniciones = _req$body6.guarniciones; // Insertar el nuevo platillo en la tabla de platillos
+          _context11.next = 4;
+          return _db.Coonexion.execute('INSERT INTO platillos (nombre, descripcion, imagen, id_estadoPlatillo, id_categoria, id_sucursal, platillo_disponible) VALUES (?, ?, ?, ?, ?, ?, ?)', [platillo, descripcion, imagen, 3, categoria, 1, true]);
+        case 4:
+          _yield$Coonexion$exec51 = _context11.sent;
+          _yield$Coonexion$exec52 = _slicedToArray(_yield$Coonexion$exec51, 1);
+          result = _yield$Coonexion$exec52[0];
           nuevoIdPlatillo = result.insertId; // Insertar las combinaciones de presentaciones y tamaños en la tabla de relacion_presentacion_tamaño
           _iterator = _createForOfIteratorHelper(combinaciones);
-          _context10.prev = 9;
+          _context11.prev = 9;
           _iterator.s();
         case 11:
           if ((_step = _iterator.n()).done) {
-            _context10.next = 21;
+            _context11.next = 21;
             break;
           }
           combinacion = _step.value;
@@ -492,109 +524,269 @@ var InsertPlatillo = exports.InsertPlatillo = /*#__PURE__*/function () {
           idTamaño = tamaño.value;
           idPresentacion = presentacion.value;
           precioAdicional = valor;
-          _context10.next = 19;
+          _context11.next = 19;
           return _db.Coonexion.execute('INSERT INTO relacion_presentacion_tamaño (id_platillo, id_presentacion, id_tamaño, precio_adicional) VALUES (?, ?, ?, ?)', [nuevoIdPlatillo, idPresentacion, idTamaño, precioAdicional]);
         case 19:
-          _context10.next = 11;
+          _context11.next = 11;
           break;
         case 21:
-          _context10.next = 26;
+          _context11.next = 26;
           break;
         case 23:
-          _context10.prev = 23;
-          _context10.t0 = _context10["catch"](9);
-          _iterator.e(_context10.t0);
+          _context11.prev = 23;
+          _context11.t0 = _context11["catch"](9);
+          _iterator.e(_context11.t0);
         case 26:
-          _context10.prev = 26;
+          _context11.prev = 26;
           _iterator.f();
-          return _context10.finish(26);
+          return _context11.finish(26);
         case 29:
           // Insertar las recomendaciones en la tabla de recomendaciones
           _iterator2 = _createForOfIteratorHelper(extras);
-          _context10.prev = 30;
+          _context11.prev = 30;
           _iterator2.s();
         case 32:
           if ((_step2 = _iterator2.n()).done) {
-            _context10.next = 41;
+            _context11.next = 41;
             break;
           }
           extra = _step2.value;
           value = extra.value, label = extra.label, precio = extra.precio;
           idPlatilloRecomendado = value;
           tipo = 'acompañamiento';
-          _context10.next = 39;
+          _context11.next = 39;
           return _db.Coonexion.execute('INSERT INTO recomendaciones (id_platillo_principal, id_platillo_recomendado, tipo) VALUES (?, ?, ?)', [nuevoIdPlatillo, idPlatilloRecomendado, tipo]);
         case 39:
-          _context10.next = 32;
+          _context11.next = 32;
           break;
         case 41:
-          _context10.next = 46;
+          _context11.next = 46;
           break;
         case 43:
-          _context10.prev = 43;
-          _context10.t1 = _context10["catch"](30);
-          _iterator2.e(_context10.t1);
+          _context11.prev = 43;
+          _context11.t1 = _context11["catch"](30);
+          _iterator2.e(_context11.t1);
         case 46:
-          _context10.prev = 46;
+          _context11.prev = 46;
           _iterator2.f();
-          return _context10.finish(46);
+          return _context11.finish(46);
         case 49:
           _iterator3 = _createForOfIteratorHelper(guarniciones);
-          _context10.prev = 50;
+          _context11.prev = 50;
           _iterator3.s();
         case 52:
           if ((_step3 = _iterator3.n()).done) {
-            _context10.next = 61;
+            _context11.next = 61;
             break;
           }
           guarnicion = _step3.value;
           _value = guarnicion.value, _label = guarnicion.label, _precio = guarnicion.precio;
           _idPlatilloRecomendado = _value;
           _tipo = 'guarnicion';
-          _context10.next = 59;
+          _context11.next = 59;
           return _db.Coonexion.execute('INSERT INTO recomendaciones (id_platillo_principal, id_platillo_recomendado, tipo) VALUES (?, ?, ?)', [nuevoIdPlatillo, _idPlatilloRecomendado, _tipo]);
         case 59:
-          _context10.next = 52;
+          _context11.next = 52;
           break;
         case 61:
-          _context10.next = 66;
+          _context11.next = 66;
           break;
         case 63:
-          _context10.prev = 63;
-          _context10.t2 = _context10["catch"](50);
-          _iterator3.e(_context10.t2);
+          _context11.prev = 63;
+          _context11.t2 = _context11["catch"](50);
+          _iterator3.e(_context11.t2);
         case 66:
-          _context10.prev = 66;
+          _context11.prev = 66;
           _iterator3.f();
-          return _context10.finish(66);
+          return _context11.finish(66);
         case 69:
           res.status(200).json({
             message: 'Platillo insertado exitosamente.'
           });
-          _context10.next = 76;
+          _context11.next = 76;
           break;
         case 72:
-          _context10.prev = 72;
-          _context10.t3 = _context10["catch"](0);
-          console.log(_context10.t3);
+          _context11.prev = 72;
+          _context11.t3 = _context11["catch"](0);
+          console.log(_context11.t3);
           res.status(500).json({
             error: 'Error al insertar un platillo.'
           });
         case 76:
         case "end":
-          return _context10.stop();
+          return _context11.stop();
       }
-    }, _callee10, null, [[0, 72], [9, 23, 26, 29], [30, 43, 46, 49], [50, 63, 66, 69]]);
+    }, _callee11, null, [[0, 72], [9, 23, 26, 29], [30, 43, 46, 49], [50, 63, 66, 69]]);
   }));
-  return function InsertPlatillo(_x19, _x20) {
-    return _ref10.apply(this, arguments);
+  return function InsertPlatillo(_x21, _x22) {
+    return _ref11.apply(this, arguments);
   };
 }();
-var MostrarPlatillosAdmin = exports.MostrarPlatillosAdmin = function MostrarPlatillosAdmin(req, res) {
-  try {} catch (error) {
-    res.status(500).json(['Error al traer los platillos']);
-  }
-};
+var MostrarPlatillosAdmin = exports.MostrarPlatillosAdmin = /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req, res) {
+    var _yield$Coonexion$exec53, _yield$Coonexion$exec54, _yield$Coonexion$exec55, result;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          _context12.next = 3;
+          return _db.Coonexion.execute('CALL ObtenerListaPlatillo()');
+        case 3:
+          _yield$Coonexion$exec53 = _context12.sent;
+          _yield$Coonexion$exec54 = _slicedToArray(_yield$Coonexion$exec53, 1);
+          _yield$Coonexion$exec55 = _slicedToArray(_yield$Coonexion$exec54[0], 1);
+          result = _yield$Coonexion$exec55[0];
+          res.status(200).json([result]);
+          _context12.next = 13;
+          break;
+        case 10:
+          _context12.prev = 10;
+          _context12.t0 = _context12["catch"](0);
+          res.status(500).json(['Error al traer los platillos']);
+        case 13:
+        case "end":
+          return _context12.stop();
+      }
+    }, _callee12, null, [[0, 10]]);
+  }));
+  return function MostrarPlatillosAdmin(_x23, _x24) {
+    return _ref12.apply(this, arguments);
+  };
+}();
+var EliminarPlatillo = exports.EliminarPlatillo = /*#__PURE__*/function () {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(req, res) {
+    var id, _yield$Coonexion$exec56, _yield$Coonexion$exec57, result, idPlato;
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      while (1) switch (_context13.prev = _context13.next) {
+        case 0:
+          _context13.prev = 0;
+          id = req.body.id;
+          _context13.next = 4;
+          return _db.Coonexion.execute('SELECT id_platillo FROM relacion_presentacion_tamaño WHERE id_relacion = ?', [id]);
+        case 4:
+          _yield$Coonexion$exec56 = _context13.sent;
+          _yield$Coonexion$exec57 = _slicedToArray(_yield$Coonexion$exec56, 1);
+          result = _yield$Coonexion$exec57[0];
+          idPlato = result[0].id_platillo; // Eliminar filas de la tabla recomendaciones que hacen referencia a la fila que se eliminará en la tabla relacion_presentacion_tamaño
+          _context13.next = 10;
+          return _db.Coonexion.execute('DELETE FROM recomendaciones WHERE id_platillo_recomendado IN (SELECT id_relacion FROM relacion_presentacion_tamaño WHERE id_platillo = ?)', [idPlato]);
+        case 10:
+          _context13.next = 12;
+          return _db.Coonexion.execute('DELETE FROM relacion_presentacion_tamaño WHERE id_platillo = ?', [idPlato]);
+        case 12:
+          _context13.next = 14;
+          return _db.Coonexion.execute('DELETE FROM platillos WHERE id_platillo = ?', [idPlato]);
+        case 14:
+          res.status(200).json(['Platillo Eliminado']);
+          _context13.next = 21;
+          break;
+        case 17:
+          _context13.prev = 17;
+          _context13.t0 = _context13["catch"](0);
+          console.log(_context13.t0);
+          res.status(500).json(['Error al eliminar el platillo']);
+        case 21:
+        case "end":
+          return _context13.stop();
+      }
+    }, _callee13, null, [[0, 17]]);
+  }));
+  return function EliminarPlatillo(_x25, _x26) {
+    return _ref13.apply(this, arguments);
+  };
+}();
+var CrearVenta = exports.CrearVenta = /*#__PURE__*/function () {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(req, res) {
+    var _req$body7, id_usuario, sumaSubtotales, id_direccion, metodoPago, precio, cambio, carrito, fechaActual, estado, _yield$Coonexion$exec58, _yield$Coonexion$exec59, ventaResult, ventaId, _iterator4, _step4, item, id_relacion, cantidad, subtotal, _iterator5, _step5, _item, id_carrito;
+    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+      while (1) switch (_context14.prev = _context14.next) {
+        case 0:
+          _context14.prev = 0;
+          _req$body7 = req.body, id_usuario = _req$body7.id_usuario, sumaSubtotales = _req$body7.sumaSubtotales, id_direccion = _req$body7.id_direccion, metodoPago = _req$body7.metodoPago, precio = _req$body7.precio, cambio = _req$body7.cambio, carrito = _req$body7.carrito;
+          fechaActual = new Date();
+          estado = 'Pendiente'; //Insertar en la tabla de ventas
+          _context14.next = 6;
+          return _db.Coonexion.execute('INSERT INTO ventas (id_usuario, total, estado_pedido, fecha_venta, id_direccion, id_metodo_pago, monto_pagado, cambio_devuelto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [id_usuario, sumaSubtotales, estado, fechaActual, id_direccion, metodoPago, precio, cambio]);
+        case 6:
+          _yield$Coonexion$exec58 = _context14.sent;
+          _yield$Coonexion$exec59 = _slicedToArray(_yield$Coonexion$exec58, 1);
+          ventaResult = _yield$Coonexion$exec59[0];
+          ventaId = ventaResult.insertId; // Insertar en la tabla de descripcion_ventas
+          _iterator4 = _createForOfIteratorHelper(carrito);
+          _context14.prev = 11;
+          _iterator4.s();
+        case 13:
+          if ((_step4 = _iterator4.n()).done) {
+            _context14.next = 20;
+            break;
+          }
+          item = _step4.value;
+          id_relacion = item.id_relacion, cantidad = item.cantidad, subtotal = item.subtotal;
+          _context14.next = 18;
+          return _db.Coonexion.execute('INSERT INTO descripcion_ventas (id_venta, id_relacion, cantidad, subtotal) VALUES (?, ?, ?, ?)', [ventaId, id_relacion, cantidad, subtotal]);
+        case 18:
+          _context14.next = 13;
+          break;
+        case 20:
+          _context14.next = 25;
+          break;
+        case 22:
+          _context14.prev = 22;
+          _context14.t0 = _context14["catch"](11);
+          _iterator4.e(_context14.t0);
+        case 25:
+          _context14.prev = 25;
+          _iterator4.f();
+          return _context14.finish(25);
+        case 28:
+          _iterator5 = _createForOfIteratorHelper(carrito);
+          _context14.prev = 29;
+          _iterator5.s();
+        case 31:
+          if ((_step5 = _iterator5.n()).done) {
+            _context14.next = 38;
+            break;
+          }
+          _item = _step5.value;
+          id_carrito = _item.id_carrito; // Eliminar el elemento del carrito en la base de datos
+          _context14.next = 36;
+          return _db.Coonexion.execute('DELETE FROM carrito WHERE id_carrito = ?', [id_carrito]);
+        case 36:
+          _context14.next = 31;
+          break;
+        case 38:
+          _context14.next = 43;
+          break;
+        case 40:
+          _context14.prev = 40;
+          _context14.t1 = _context14["catch"](29);
+          _iterator5.e(_context14.t1);
+        case 43:
+          _context14.prev = 43;
+          _iterator5.f();
+          return _context14.finish(43);
+        case 46:
+          //Otras acciones según sea necesario (por ejemplo, actualizar inventario)
+          res.status(200).json(['Compra realizada exitosamente']);
+          _context14.next = 53;
+          break;
+        case 49:
+          _context14.prev = 49;
+          _context14.t2 = _context14["catch"](0);
+          console.error(_context14.t2);
+          res.status(500).json({
+            error: 'Error al procesar la compra'
+          });
+        case 53:
+        case "end":
+          return _context14.stop();
+      }
+    }, _callee14, null, [[0, 49], [11, 22, 25, 28], [29, 40, 43, 46]]);
+  }));
+  return function CrearVenta(_x27, _x28) {
+    return _ref14.apply(this, arguments);
+  };
+}();
 
 //TODO:
 // export const TraerCategorias = async(req, res) => {

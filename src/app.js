@@ -25,6 +25,10 @@ app.get("/api", (req, res) => {
     res.send('Bienvenido a la Api')
 })
 
+app.get('/', (req, res) => {
+    res.send('¡El API está en funcionamiento!')
+})
+
 app.use((req,res, next)=>{
     res.status(404).json({
         message:"ruta no encontrada"

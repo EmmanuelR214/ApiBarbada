@@ -36,7 +36,6 @@ export const verifYTokenAdmin = async(req, res) =>{
             if(!userFound[0]) return res.status(401).json(['Unauthorized'])
             
             const [[dataUser]] = userFound
-            console.log(dataUser)
             return res.json({
                 id: dataUser.id_usuario,
                 rol: dataUser.roles
@@ -77,8 +76,15 @@ export const LoginAdmin = async(req, res) =>{
     }
 }
 
-
-
+export const TraerReporteVentas = async(req, res) => {
+    try {
+        const [result] = await Coonexion.execute('SELECT v.id_venta, u.correo AS nombre_usuario, v.estado_pedido, d.direccion AS descripcion_direccion, v.fecha_venta FROM ventas v JOIN usuarios u ON v.id_usuario = u.id_usuario JOIN direcciones d ON v.id_direccion = d.id_direccion JOIN descripcion_ventas dv ON v.id_venta = dv.id_venta')
+        res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(['Error del servidor'])
+    }
+}
 
 
 

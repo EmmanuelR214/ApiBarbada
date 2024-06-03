@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifYTokenAdmin, GetClientes, LoginAdmin } from "../controllers/admin.controllers.js";
+import { verifYTokenAdmin, GetClientes, LoginAdmin, TraerReporteVentas } from "../controllers/admin.controllers.js";
 import { authRequired } from "../middlewares/validateToke.js";
 
 const router = Router()
@@ -13,6 +13,9 @@ router.post('/clientes', authRequired, GetClientes)
 
 //Login Admin
 router.post('/login-admin', LoginAdmin)
+
+//Traer venta general
+router.get('/ventageneral', TraerReporteVentas)
 
 
 export default router

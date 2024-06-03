@@ -27,6 +27,9 @@ app.use('/api', _adminRoutes["default"]);
 app.get("/api", function (req, res) {
   res.send('Bienvenido a la Api');
 });
+app.get('/', function (req, res) {
+  res.send('¡El API está en funcionamiento!');
+});
 app.use(function (req, res, next) {
   res.status(404).json({
     message: "ruta no encontrada"
