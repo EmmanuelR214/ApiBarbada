@@ -16,6 +16,16 @@ export const GetMenu = async (req, res) => {
   }
 }
 
+export const OfertasPlatillos = async(req, res) =>{
+  try {
+    const [result] = await Coonexion.execute('SELECT * FROM platillos WHERE id_estadoPlatillo = 2')
+    const nom = result.map((el) => el.nombre)
+    res.status(200).json(nom)
+  } catch (error) {
+    res.status(500).json(['Error al traer las ofertas'])
+  }
+}
+
 /*
 export const getMenu = async (req, res) => {
   try {
