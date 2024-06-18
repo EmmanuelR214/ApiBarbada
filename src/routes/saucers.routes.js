@@ -12,11 +12,13 @@ import {
   ObtenerPrecio, 
   TraerDatosPlatillo, 
   TraerDatosPlatilloActualizar, 
-  UpdateShoppingCar
+  UpdateShoppingCar,
+  OfertasPlatillos
 } from "../controllers/saucers.controllers.js";
 
 const router = Router()
 
+router.get('/ofertas', OfertasPlatillos)
 
 //Traer menú
 router.get('/menu', GetMenu)
