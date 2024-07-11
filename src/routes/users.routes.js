@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {verifYToken, PostLogout, SearchNumberPhoneRegister, RegisterUser, LoginUser, RegisterFirebase, sendEmail, RecoverPasswordEmail, AlertUser, TraerDireccionUser, InsertarDireccion, BuscarCorreo} from "../controllers/users.controllers.js";
+import {verifYToken, PostLogout, SearchNumberPhoneRegister, RegisterUser, LoginUser, RegisterFirebase, sendEmail, RecoverPasswordEmail, AlertUser, TraerDireccionUser, InsertarDireccion, BuscarCorreo, InsertarVentaSkill } from "../controllers/users.controllers.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
 import { registerSchema } from "../schemas/auth.schema.js";
 import { CrearVenta } from "../controllers/saucers.controllers.js";
