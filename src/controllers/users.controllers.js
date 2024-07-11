@@ -283,8 +283,22 @@ export const BuscarCorreo = async (req, res) => {
 
 export const InsertarVentaSkill = async (req, res) => {
     try{
-        const {correo, platillo} = req.body
-        await Coonexion.execute('INSERT INTO () VALUES ()',[])
+    const { correo, platillo } = req.body;
+    const fechaActual = new Date();
+    const estado = 'Pendiente';
+    const metodoPago = 'Efectivo'
+    const [[repeaterMail]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)',[correo])
+
+    //Insertar en la tabla de ventas
+    const [ventaResult] = await Coonexion.execute('INSERT INTO ventas (id_usuario, total, estado_pedido, fecha_venta, id_direccion, id_metodo_pago, monto_pagado, cambio_devuelto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [id_usuario, sumaSubtotales, estado, fechaActual, id_direccion, metodoPago, precio, cambio]);
+    const ventaId = ventaResult.insertId;
+    // Insertar en la tabla de descripcion_ventas
+    for (const item of carrito) {
+      const { id_relacion, cantidad, subtotal } = item;
+      await Coonexion.execute('INSERT INTO descripcion_ventas (id_venta, id_relacion, cantidad, subtotal) VALUES (?, ?, ?, ?)', [ventaId, id_relacion, cantidad, subtotal]);
+    }
+    //Otras acciones según sea necesario (por ejemplo, actualizar inventario)
+    res.status(200).json(['Compra realizada exitosamente']);
     } catch(error){
         res.status(500).json(['Error al buscar'])
     }
