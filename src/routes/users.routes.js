@@ -47,6 +47,10 @@ router.post('/logout',PostLogout)
 //Buscar correo
 router.post('/correo', BuscarCorreo)
 
+//para alexa
+router.post('/venta-skill', InsertarVentaSkill)
+
+
 export default router
 
 /*
