@@ -281,6 +281,15 @@ export const BuscarCorreo = async (req, res) => {
     }
 }
 
+export const InsertarVentaSkill = async (req, res) => {
+    try{
+        const {correo, platillo} = req.body
+        await Coonexion.execute('INSERT INTO () VALUES ()',[])
+    } catch(error){
+        res.status(500).json(['Error al buscar'])
+    }
+}
+
 /*
 export const BlockUser = async(req, res) =>{
     const {nombre, pass} = req.body 
