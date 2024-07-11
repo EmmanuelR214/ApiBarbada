@@ -271,6 +271,16 @@ export const InsertarDireccion = async(req, res) => {
     }
 }
 
+export const BuscarCorreo = async (req, res) => {
+    try{
+        const {correo} = req.body
+        const [[repeaterMail]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)',[correo])
+        if (repeaterMail.length > 0) return res.status(200).json(['Si'])
+    } catch(error){
+        res.status(500).json(['Error al buscar'])
+    }
+}
+
 /*
 export const BlockUser = async(req, res) =>{
     const {nombre, pass} = req.body 
