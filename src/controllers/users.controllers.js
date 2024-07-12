@@ -290,7 +290,7 @@ export const InsertarVentaSkill = async (req, res) => {
     try {
         const { correo, platillo } = req.body;
         const fechaActual = new Date();
-        const estado = 'Pendiente';
+        const estado = 'Orden de alexa';
         let total = 0; // Inicializamos total como 0
         const metodoPago = 1;
         
