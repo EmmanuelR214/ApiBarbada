@@ -292,7 +292,7 @@ export const InsertarVentaSkill = async (req, res) => {
         const fechaActual = new Date();
         const estado = 'Pendiente';
         let total = 0; // Inicializamos total como 0
-        const metodoPago = 'Efectivo';
+        const metodoPago = 1;
         
         // Obtener el ID de usuario
         const [[repeaterMail]] = await Coonexion.execute('CALL ObtenerUsuarioCorreo(?)', [correo]);
