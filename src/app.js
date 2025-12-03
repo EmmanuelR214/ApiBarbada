@@ -7,7 +7,7 @@ import indexRoutesAdmin from './routes/admin.routes.js'
 
 const app = express()
 
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://la-barbada2.vercel.app/']
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://la-barbada2.vercel.app']
 // const allowedOrigins = ['amdin.labarbada.store ', 'labarbada.store']
 
 app.use(cors({
